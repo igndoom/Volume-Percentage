@@ -11,7 +11,7 @@ using namespace geode::prelude;
 float mod_volume;
 
 
-float MaxVolume = Mod::get()->getSettingValue<float>("maximum-volume");
+float MaxVolume = Mod::get()->getSettingValue<double>("maximum-volume");
 bool EditSFX = Mod::get()->getSettingValue<bool>("edit-sfx");
 
 $execute {
