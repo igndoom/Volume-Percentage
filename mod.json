@@ -8,7 +8,7 @@
 	},
 	"id": "doom.volume_percentage",
 	"name": "Volume Percentage",
-	"version": "v1.0.0",
+	"version": "v1.0.1",
 	"developer": "doom",
 	"description": "Change volume based on your % in the level.",
 	"tags": ["joke", "offline", "music"],
