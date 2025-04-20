@@ -8,8 +8,6 @@
  */
 using namespace geode::prelude;
 
-float mod_volume;
-
 
 float MaxVolume = Mod::get()->getSettingValue<double>("maximum-volume");
 bool EditSFX = Mod::get()->getSettingValue<bool>("edit-sfx");
@@ -31,14 +29,23 @@ class $modify(PlayLayer) {
 
 	void postUpdate(float dt) {
 		PlayLayer::postUpdate(dt);
-		mod_volume = PlayLayer::get()->getCurrentPercent();
+		if (m_isPlatformer) return;
+		float mod_volume = getCurrentPercent();
 		if(mod_volume > MaxVolume){
 			mod_volume = MaxVolume;
 		};
 		// log::info("{}", mod_volume);
-		FMODAudioEngine::get()->setBackgroundMusicVolume(mod_volume / 100);
-		if(EditSFX) FMODAudioEngine::get()->setEffectsVolume(mod_volume / 100);
+		FMODAudioEngine* engine = FMODAudioEngine::get();
+		if(engine->m_backgroundMusicChannel) engine->m_backgroundMusicChannel->setVolume(mod_volume / 100);
+		if(EditSFX && engine->m_globalChannel) engine->m_globalChannel->setVolume(mod_volume / 100);
 		
 	}
 	
+	void onExit() {
+		PlayLayer::onExit();
+		if (m_isPlatformer) return;
+		FMODAudioEngine* engine = FMODAudioEngine::get();
+		if(engine->m_backgroundMusicChannel) engine->m_backgroundMusicChannel->setVolume(engine->m_musicVolume);
+		if(EditSFX && engine->m_globalChannel) engine->m_globalChannel->setVolume(engine->m_sfxVolume);
+	}
 };
